@@ -1,0 +1,9 @@
+{% extends "base_template.html" %}
+{% block content %}
+<p>{{ error_message }}</p>
+<p><b>Для начала работы укажите количество офисов</b></p>
+  <form action = "http://localhost:5000/init" method = "post">
+    <input type="number" size="10" name="offices_count">
+    <input type="submit">
+  </form>
+{% endblock %}

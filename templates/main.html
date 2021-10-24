@@ -1,0 +1,35 @@
+{% extends "base_template.html" %}
+{% block content %}
+<p xmlns="http://www.w3.org/1999/html">Список офисов и их посетителей</p>
+    <table>
+      {% for office_num in range(office_count) %}
+      <td>
+        <p> Офис номер {{office_num + 1}}
+        </p>
+        <ul>
+          {% for visitor in offices[office_num].visitors %}
+            <li>
+              <p>{{visitor.first_name + ' ' + visitor.last_name}}</p>
+
+            </li>
+          {% endfor %}
+        </ul>
+      </td>
+      {% endfor %}
+    </table>
+  <br>
+  <p>Очередь ожидающих входа в офис</p>
+  <ul>
+    {% for waiting in queue %}
+      <li>
+        <p>{{waiting.first_name + ' ' + waiting.last_name}}</p>
+      </li>
+    {% endfor %}
+  </ul>
+  <p>Выберите действие:</p>
+    <form action = "http://localhost:5000/actions" method = "post">
+    <p><input type="radio" name="actions" value="add"> Добавить пользователя</p>
+    <p><input type="radio" name="actions" value="stats"> Вывести статистику по пользователю</p>
+    <input type="submit">
+  </form>
+{% endblock %}
