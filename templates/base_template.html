@@ -3,7 +3,7 @@
   <head>
     <title>Управление офисным пространством</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="stylesheet.css" rel="stylesheet" media="screen">
     <style type="text/css">
       .container {
         max-width: 500px;
@@ -13,9 +13,9 @@
     </style>
   </head>
   <body>
-  <h5>{{ page_title }}</h5>
+  <h2>{{ page_title }}</h2>
     {% block content %}{% endblock %}
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <br>
+  {% include 'footer.html' %}
   </body>
 </html>

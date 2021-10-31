@@ -1,19 +1,20 @@
 {% extends "base_template.html" %}
 {% block content %}
-<p xmlns="http://www.w3.org/1999/html">Список офисов и их посетителей</p>
-    <table>
-      {% for office_num in range(office_count) %}
+<h3>Список офисов и их посетителей</h3>
+    <table class="rtable">
+      {% for office in offices %}
       <td>
-        <p> Офис номер {{office_num + 1}}
+        <p> Офис номер {{office}}
         </p>
-        <ul>
-          {% for visitor in offices[office_num].visitors %}
+        <ol>
+          {% if not office is none %}
+          {% for visitor in offices[office] %}
             <li>
-              <p>{{visitor.first_name + ' ' + visitor.last_name}}</p>
-
+              <p>{{visitor}}</p>
             </li>
           {% endfor %}
-        </ul>
+          {% endif %}
+        </ol>
       </td>
       {% endfor %}
     </table>
@@ -22,14 +23,18 @@
   <ul>
     {% for waiting in queue %}
       <li>
-        <p>{{waiting.first_name + ' ' + waiting.last_name}}</p>
+        <p>{{waiting}}</p>
       </li>
     {% endfor %}
   </ul>
   <p>Выберите действие:</p>
-    <form action = "http://localhost:5000/actions" method = "post">
-    <p><input type="radio" name="actions" value="add"> Добавить пользователя</p>
-    <p><input type="radio" name="actions" value="stats"> Вывести статистику по пользователю</p>
-    <input type="submit">
+  <a href="/add_user">Добавить пользователя в офис.</a><br>
+  <a href="/user_info">Вывести информацию о пользователе</a><br><br>
+  <p>Переход к более позднему времени</p>
+  <form action = "skip_time" method = "post">
+    <p><input type="number" name="add_hours" value="1" min="1" max="10">
+      Укажите количество часов на которое переместиться вперед (не более 10)</p>
+    <input type="submit" name="actions" value="Выполнить">
   </form>
+
 {% endblock %}
