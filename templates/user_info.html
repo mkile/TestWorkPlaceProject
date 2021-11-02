@@ -1,7 +1,7 @@
 {% extends "base_template.html" %}
 {% block content %}
 <p>{{ error_message }}</p>
-<p><b>Выберите пользователя из списка</b></p>
+<p><h4>Выберите пользователя из списка</h4></p>
   <form action="user_info" method="post" name="visitor">
     <select name="selected_user">
       {% for person in users_list %}

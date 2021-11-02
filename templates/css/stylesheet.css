@@ -9,7 +9,7 @@ hr {
 }
 h1 {
 	margin: 1em 0 0.5em 0;
-	color: #343434;
+	color: #000099;
 	font-weight: normal;
 	font-family: 'Arial', sans-serif;
 	font-size: 36px;
@@ -20,7 +20,7 @@ h1 {
 
 h2 {
 	margin: 1em 0 0.5em 0;
-	color: #343434;
+	color: #00001a;
 	font-weight: normal;
 	font-size: 30px;
 	line-height: 40px;
@@ -29,7 +29,7 @@ h2 {
 
 h3 {
 	margin: 1em 0 0.5em 0;
-	color: #343434;
+	color: #00001a;
 	font-size: 22px;
 	line-height: 40px;
 	font-weight: normal;
@@ -41,7 +41,7 @@ h3 {
 
 h4 {
 	margin: 0 0 0 0;
-	color: #343434;
+	color: #00001a;
 	font-size: 18px;
 	line-height: 20px;
 	font-weight: normal;
@@ -50,7 +50,7 @@ h4 {
 
 h5 {
 	margin: 0 0 0 0;
-	color: #343434;
+	color: #00001a;
 	font-size: 16px;
 	line-height: 20px;
 	font-weight: bold;

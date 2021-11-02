@@ -121,7 +121,7 @@ def internal_server_error(e):
     return render_template("error_page.html", page_title="Возникла внутренняя ошибка сервера.", error_message=e)
 
 
-# Временно разместим процедуру создания соединения тут. Постоянное соединение в разных потоках не работает
+# Постоянное соединение в разных потоках не работает
 def connection():
     """Создание соединения"""
     return connect(DB_NAME)
@@ -132,4 +132,4 @@ app.config.from_pyfile('config.py')
 if not initialize_database(connection()):
     quit("An error was encountered during initialization.")
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
