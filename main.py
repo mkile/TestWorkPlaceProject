@@ -1,27 +1,33 @@
-from flask import Flask, render_template, url_for, redirect, send_from_directory
-from flask import request
-from src.logic import set_offices_count, get_offices_count, get_queue, get_users_in_offices, get_users_info, \
-    try_to_add_user_to_office
-from src.init import initialize_database
-from sqlite3 import connect
 import os
 
+from flask import Flask, render_template, url_for, redirect, send_from_directory, request, abort
+from sqlite3 import connect
+
+from src.constants import DB_NAME
+from src.logic import set_offices_count, get_offices_count, get_users_in_queue, get_users_in_offices, get_users_info, \
+    try_to_add_user_to_office, process_time_step
+from src.init import initialize_database
+
 app = Flask(__name__)
-DB_NAME = "data/database.db"
 
 
 @app.route("/")
 def index():
+    """Главная страница"""
     if get_offices_count(connection()) == 0:
         return redirect(url_for("init"))
+    title = "Главная страница"
     offices = get_users_in_offices(connection())
-    queue = get_queue(connection())
-    return render_template('main.html', page_title="Главная страница",
+    queue = get_users_in_queue(connection())
+    return render_template('main.html', page_title=title,
                            offices=offices, office_count=len(offices), waiting=queue)
 
 
 @app.route("/init", methods=["POST", "GET"])
 def init():
+    """Задание количества офисов"""
+    if get_offices_count(connection()) > 0:
+        return redirect(url_for("index"))
     if request.method == "POST":
         try:
             offices_count = int(request.form["offices_count"])
@@ -37,6 +43,7 @@ def init():
 
 @app.route("/add_user", methods=["POST", "GET"])
 def add_user():
+    """Добавление пользователя в офис"""
     if get_offices_count(connection()) == 0:
         return redirect(url_for("init"))
     title = "Добавление пользователя в список работающих в офисе."
@@ -59,6 +66,7 @@ def add_user():
 
 @app.route("/user_info", methods=["POST", "GET"])
 def user_info():
+    """Получение информации о пользователе"""
     if get_offices_count(connection()) == 0:
         return redirect(url_for("init"))
     title = "Вывод информации о пользователе"
@@ -78,6 +86,16 @@ def user_info():
 @app.route("/skip_time", methods=["POST"])
 def skip_time():
     """Перемещение на указанное количество часов вперед"""
+    if get_offices_count(connection()) == 0:
+        return redirect(url_for("init"))
+    try:
+        time_step = int(request.form['add_hours'])
+        if time_step < 1 or time_step > 10:
+            return redirect(url_for("index"))
+        process_time_step(connection(), time_step)
+    except ValueError:
+        return abort(500)
+    return redirect(url_for("index"))
     pass
 
 
@@ -105,7 +123,7 @@ def internal_server_error(e):
 
 # Временно разместим процедуру создания соединения тут. Постоянное соединение в разных потоках не работает
 def connection():
-    """Создание соединения """
+    """Создание соединения"""
     return connect(DB_NAME)
 
 

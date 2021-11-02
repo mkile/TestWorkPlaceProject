@@ -1,6 +1,6 @@
 from json import loads
 from sqlite3 import Error
-from src.constants import OFFICES_TABLE, USERS_TABLE, USERS_FIELDS_LIST
+from src.constants import OFFICES_TABLE, USERS_TABLE, USERS_FIELDS_LIST, QUEUE_TABLE
 
 TABLE_CREATE_REQUEST = "CREATE TABLE IF NOT EXISTS {} ({})"
 INSERT_REQUEST = "INSERT OR REPLACE INTO {} ({}) VALUES ({})"
@@ -66,7 +66,7 @@ def clear_tables_data(connection):
         with connection:
             connection.execute(f'DELETE FROM {OFFICES_TABLE}')
             connection.execute(f'UPDATE {USERS_TABLE} SET OFFICE_ID=NULL')
-        # Возможно стоит добавить обнуление данных пользователей (время работы и пр.)
+            connection.execute(f'DELETE FROM {QUEUE_TABLE}')
     except Error:
         print('Error clearing tables')
         return False
@@ -93,5 +93,6 @@ def load_users():
 
 
 def get_users_count(connection):
+    """Получить список пользователей из базы"""
     result = connection.execute(f'SELECT COUNT(ID) FROM {USERS_TABLE}')
     return result.fetchall()[0][0]
