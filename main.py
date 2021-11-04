@@ -5,7 +5,7 @@ from sqlite3 import connect
 
 from src.constants import DB_NAME
 from src.logic import set_offices_count, get_offices_count, get_users_in_queue, get_users_in_offices, get_users_info, \
-    try_to_add_user_to_office, process_time_step
+    try_to_add_user_to_office, process_time_step, remove_user_from_office
 from src.init import initialize_database
 
 app = Flask(__name__)
@@ -60,6 +60,30 @@ def add_user():
             return redirect(url_for('index'))
         except ValueError:
             return render_template("add_user.html", page_title=title, persons=users,
+                                   error_message="Передан недействительный номер пользователя")
+    return index()
+
+
+@app.route("/remove_user", methods=["POST", "GET"])
+def remove_user():
+    """Удаление пользователя из офиса"""
+    if get_offices_count(connection()) == 0:
+        return redirect(url_for("init"))
+    title = "Удаление пользователя из офиса."
+    users = get_users_info(connection())
+    users = [user for user in users if not user['Office'] is None and user['Queue'] is None]
+    if len(users) == 0:
+        return redirect(url_for("init"))
+    if request.method == "GET":
+        return render_template("remove_user.html", page_title=title,
+                               persons=users)
+    elif request.method == "POST":
+        try:
+            user_id = int(request.form["user_id"])
+            remove_user_from_office(connection(), user_id)
+            return redirect(url_for('index'))
+        except ValueError:
+            return render_template("remove_user.html", page_title=title, persons=users,
                                    error_message="Передан недействительный номер пользователя")
     return index()
 
