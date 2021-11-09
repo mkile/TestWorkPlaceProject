@@ -10,28 +10,28 @@
         </option>
       {% endfor %}
     </select>
-    <p><input type="submit" value="Отправить"></p>
+      <button type="submit">Отправить</button>
   </form>
-    {% if selected_user > -1 %}
+{% if not selected_user is none %}
 <hr>
       <h4><b>Информация о пользователе</b></h4>
 <br>
-Имя: <b>{{ users_list[selected_user]["First_name"] }}</b> <br>
-Фамилия: <b>{{ users_list[selected_user]["Last_name"] }}</b> <br>
-Осталось рабочих часов: <b>{{ users_list[selected_user]["R_work_time"] }}</b> <br>
-Всего отработано часов: <b>{{ users_list[selected_user]["Work_hours"] }}</b> <br>
-      {% if not users_list[selected_user]["Office"] is none %}
-Пользователь работает в офисе номер: <b>{{ users_list[selected_user]["Office"] }}</b>
+Имя: <b>{{ selected_user["First_name"] }}</b> <br>
+Фамилия: <b>{{ selected_user["Last_name"] }}</b> <br>
+Осталось рабочих часов: <b>{{ selected_user["R_work_time"] }}</b> <br>
+Всего отработано часов: <b>{{ selected_user["Work_hours"] }}</b> <br>
+      {% if not selected_user["Office"] is none %}
+Пользователь работает в офисе номер: <b>{{ selected_user["Office"] }}</b>
       {% else %}
         Пользователь в настояшее время не работает в офисе
       {% endif %}
       <br>
-      {% if not users_list[selected_user]["Queue"] is none %}
+      {% if not selected_user["Queue"] is none %}
 <b>Пользователь находится в очереди.</b>
       {% else %}
         Пользователь в настоящее время не в очереди.
       {% endif %}
       <br>
-    {% endif %}
+{% endif %}
 
 {% endblock %}

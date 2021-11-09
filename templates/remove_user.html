@@ -1,7 +1,7 @@
 {% extends "base_template.html" %}
 {% block content %}
 <p>{{ error_message }}</p>
-<p><b>Выберите пользователя из списка</b></p>
+<p><strong>Выберите пользователя из списка</strong></p>
   <form action="remove_user" method="post" name="visitor">
     <select name="user_id">
       {% for person in persons %}
@@ -10,7 +10,7 @@
         </option>
       {% endfor %}
     </select>
-    <p><input type="submit" value="Отправить"></p>
+    <button type="submit">Отправить</button>
   </form>
 
 {% endblock %}

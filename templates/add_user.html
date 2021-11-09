@@ -1,7 +1,7 @@
 {% extends "base_template.html" %}
 {% block content %}
 <p>{{ error_message }}</p>
-<p><b>Выберите пользователя из списка</b></p>
+<p><strong>Выберите пользователя из списка</strong></p>
   <form action="add_user" method="post" name="visitor">
     <select name="user_id">
       {% for person in persons %}
@@ -12,7 +12,7 @@
     </select>
     <p>Укажите, сколько часов данный сотрудник хотел бы поработать (от 1 до 10 часов):</p>
     <input type="number" name="working_hours" min="1" max="10" value="1">
-    <p><input type="submit" value="Отправить"></p>
+    <button type="submit">Отправить</button>
   </form>
 
 {% endblock %}

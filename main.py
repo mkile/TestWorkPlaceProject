@@ -5,7 +5,7 @@ from sqlite3 import connect
 
 from src.constants import DB_NAME
 from src.logic import set_offices_count, get_offices_count, get_users_in_queue, get_users_in_offices, get_users_info, \
-    try_to_add_user_to_office, process_time_step, remove_user_from_office
+    try_to_add_user_to_office, process_time_step, remove_user_from_office, get_user_by_id
 from src.init import initialize_database
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ def init():
                 raise ValueError
             set_offices_count(connection(), offices_count)
             return redirect(url_for("index"))
-        except Exception:
+        except ValueError:
             return render_template('init.html', page_title="Повторная инициализация",
                                    error_message="Ошибка ввода количества офисов, повторите попытку.")
     return render_template('init.html', page_title="Инициализация")
@@ -96,15 +96,18 @@ def user_info():
     title = "Вывод информации о пользователе"
     users = get_users_info(connection())
     if request.method == "GET":
-        return render_template("user_info.html", page_title=title, users_list=users, selected_user=-1)
+        return render_template("user_info.html", page_title=title, users_list=users, selected_user=None)
     if request.method == "POST":
         try:
             user_id = int(request.form['selected_user'])
-            user_id = [ind for ind, x in enumerate(users) if x['user_id'] == user_id][0]
+            user_id = get_user_by_id(connection(), user_id)
+            if user_id is None:
+                raise ValueError
+            user = [user for user in users if user["user_id"] == user_id][0]
         except ValueError:
-            return render_template("user_info.html", page_title=title, users_list=users, selected_user=-1,
+            return render_template("user_info.html", page_title=title, users_list=users, selected_user=None,
                                    error_message="Введено некоректное значение идентификатора пользователя")
-        return render_template("user_info.html", page_title=title, users_list=users, selected_user=user_id)
+        return render_template("user_info.html", page_title=title, users_list=users, selected_user=user)
 
 
 @app.route("/skip_time", methods=["POST"])
@@ -120,19 +123,6 @@ def skip_time():
     except ValueError:
         return abort(500)
     return redirect(url_for("index"))
-    pass
-
-
-@app.route("/favicon.ico")
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-
-@app.route("/stylesheet.css")
-def stylesheet():
-    return send_from_directory(os.path.join(app.root_path, 'templates/css'),
-                               'stylesheet.css', mimetype='text/css')
 
 
 @app.errorhandler(404)
@@ -156,4 +146,4 @@ app.config.from_pyfile('config.py')
 if not initialize_database(connection()):
     quit("An error was encountered during initialization.")
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

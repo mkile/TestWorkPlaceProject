@@ -3,7 +3,8 @@
   <head>
     <title>Управление офисным пространством</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="stylesheet.css" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='/css/stylesheet.css') }}" rel="stylesheet" media="screen">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
   </head>
   <body>
   <h2>{{ page_title }}</h2>

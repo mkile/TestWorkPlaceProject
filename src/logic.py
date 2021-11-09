@@ -30,6 +30,12 @@ def get_users_in_offices(connection):
     return ret_result
 
 
+def get_user_by_id(connection, user_id):
+    """Получить пользователя по идентификатору"""
+    result = connection.execute(f'select id from {USERS_TABLE} where id=?', [user_id])
+    return result.fetchall()[0][0]
+
+
 def add_user_to_office(connection, office_id, user_id):
     """Добавить пользователя в офис"""
     with connection:
